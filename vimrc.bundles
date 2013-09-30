@@ -85,6 +85,7 @@
     " General
         if count(g:bundle_groups, 'general')
             Bundle 'scrooloose/nerdtree'
+            Bundle 'scrooloose/nerdcommenter'
             Bundle 'altercation/vim-colors-solarized'
             Bundle 'tpope/vim-surround'
             Bundle 'tpope/vim-repeat'
@@ -103,14 +104,13 @@
             Bundle 'godlygeek/csapprox'
             Bundle 'oblitum/rainbow'
             Bundle 'mbbill/undotree'
-            Bundle 'nathanaelkane/vim-indent-guides'
+            Bundle 'Yggdroot/indentLine'
             Bundle 'tpope/vim-abolish.git'
         endif
 
     " General Programming
         if count(g:bundle_groups, 'programming')
             " Pick one of the checksyntax, jslint, or syntastic
-            Bundle 'tpope/vim-commentary'
             Bundle 'godlygeek/tabular'
             if executable('ctags')
                 Bundle 'majutsushi/tagbar'
@@ -152,7 +152,7 @@
         endif
 
     " Languages
-        Bundle 'sheerun/vim-polygot'
+        Bundle 'sheerun/vim-polyglot'
     " Misc
         if count(g:bundle_groups, 'misc')
             Bundle 'kana/vim-arpeggio'
