@@ -670,6 +670,9 @@ function! InitializeDirectories()
       let dir_list['undo'] = 'undodir'
    endif
 
+   " turn off swapfiles
+   set noswapfile
+
    " To specify a different directory in which to place the vimbackup,
    " vimviews, vimundo, and vimswap files/directories, add the following to
    " your .vimrc.before.local file:
