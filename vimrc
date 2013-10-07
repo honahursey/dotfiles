@@ -239,6 +239,7 @@ autocmd FileType haskell setlocal nospell
 
 " }
 
+
 " Key (re)Mappings {
 
 " The default leader is '\', but many people prefer ',' as it's in a standard
@@ -425,6 +426,11 @@ let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 
 if gitroot != ''
    let &tags = &tags . ',' . gitroot . '/.git/tags'
 endif
+" }
+
+" DelimitMate {
+" Turn off all quote matching
+let delimitMate_quotes = ""
 " }
 
 " AutoCloseTag {
