@@ -263,9 +263,19 @@ if !exists('g:no_easyWindows')
    map <C-H> <C-W>h<C-W>_
 endif
 
+" prevent fat fingering F1
+map f1 <Esc>
+
 " Wrapped lines goes down/up to next row, rather than next line in file.
 noremap j gj
 noremap k gk
+
+" <Ctrl-l> to insert a <=
+inoremap <C-l>  <= 
+
+" Map . to reset to the original cursor position when complete
+" This makes use of marks to the letter 'q'
+noremap . mq.`q
 
 " The following two lines conflict with moving to top and
 " bottom of the screen

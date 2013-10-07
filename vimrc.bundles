@@ -74,7 +74,7 @@
     " In your .vimrc.bundles.local file"
     " list only the plugin groups you will use
     if !exists('g:bundle_groups')
-        let g:bundle_groups=['general', 'snipmate', 'programming', 'systemverilog', 'python', 'misc']
+        let g:bundle_groups=['general', 'snipmate', 'supertab', 'programming', 'systemverilog', 'python', 'misc']
     endif
 
     " To override all the included bundles, put
@@ -136,6 +136,8 @@
             Bundle 'honza/vim-snippets'
         elseif count(g:bundle_groups, 'youcompleteme')
             Bundle 'Valloric/YouCompleteMe'
+        elseif count(g:bundle_groups, 'supertab')
+            Bundle 'ervandew/supertab'
         endif
 
     " Python
