@@ -74,7 +74,7 @@
     " In your .vimrc.bundles.local file"
     " list only the plugin groups you will use
     if !exists('g:bundle_groups')
-        let g:bundle_groups=['general', 'snipmate', 'supertab', 'programming', 'systemverilog', 'python', 'misc']
+        let g:bundle_groups=['general', 'snipmate', 'neocomplete', 'programming', 'systemverilog', 'python', 'misc']
     endif
 
     " To override all the included bundles, put
@@ -103,6 +103,7 @@
             Bundle 'Lokaltog/vim-easymotion'
             Bundle 'godlygeek/csapprox'
             Bundle 'oblitum/rainbow'
+            Bundle 'vim-scripts/surrparen'
             Bundle 'mbbill/undotree'
             Bundle 'Yggdroot/indentLine'
             Bundle 'tpope/vim-abolish.git'
@@ -111,7 +112,7 @@
     " General Programming
         if count(g:bundle_groups, 'programming')
             " Pick one of the checksyntax, jslint, or syntastic
-            Bundle 'godlygeek/tabular'
+            Bundle 'junegunn/vim-easy-align'
             if executable('ctags')
                 Bundle 'majutsushi/tagbar'
             endif
@@ -128,12 +129,8 @@
         endif
         if count(g:bundle_groups, 'neocomplcache')
             Bundle 'Shougo/neocomplcache'
-            Bundle 'Shougo/neosnippet'
-            Bundle 'honza/vim-snippets'
         elseif count(g:bundle_groups, 'neocomplete')
-            Bundle 'Shougo/neocomplete.vim.git'
-            Bundle 'Shougo/neosnippet'
-            Bundle 'honza/vim-snippets'
+            Bundle 'Shougo/neocomplete.vim'
         elseif count(g:bundle_groups, 'youcompleteme')
             Bundle 'Valloric/YouCompleteMe'
         elseif count(g:bundle_groups, 'supertab')
