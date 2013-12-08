@@ -309,6 +309,7 @@ endif
 nnoremap Y y$
 " Map ; to :
 nnoremap ; :
+vnoremap ; :
 
 " Code folding options
 nmap <leader>f0 :set foldlevel=0<CR>
