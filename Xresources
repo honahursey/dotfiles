@@ -1,4 +1,4 @@
-Xcursor.theme: ComixCursors-White-Small
+Xcursor.theme: ComixCursors-Slim-White
 
 URxvt.saveLines:32767
 URxvt.scrollBar: false
@@ -6,7 +6,7 @@ URxvt*urlLauncher: /usr/bin/firefox
 
 !URxvt*facename: Source Code Pro
 URxvt*font: xft:Source Code Pro:size=9
-URxvt*facesize: 12
+URxvt*facesize: 8
 
 ! Solarized color scheme for the X Window System
 !
