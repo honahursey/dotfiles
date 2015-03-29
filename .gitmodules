@@ -1,3 +1,9 @@
-[submodule "zsh"]
-	path = zsh
-	url = https://github.com/dotphiles/dotzsh.git
+[submodule "z"]
+	path = z_sh
+	url = https://github.com/rupa/z.git
+[submodule "zprezto"]
+	path = zprezto
+	url = https://github.com/sorin-ionescu/prezto.git
+[submodule "bash-it"]
+	path = bash-it
+	url = https://github.com/Bash-it/bash-it.git
