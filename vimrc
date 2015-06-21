@@ -2,19 +2,10 @@
 " vim: set sw=3 ts=3 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 " }
 
-" Before {
-
 " Use local before if available {
 if filereadable(expand("~/.vimrc.before.local"))
    source ~/.vimrc.before.local
 endif
-" }
-
-" Use fork before if available {
-if filereadable(expand("~/.vimrc.before.fork"))
-   source ~/.vimrc.before.fork
-endif
-" }
 " }
 
 " Environment {
@@ -51,12 +42,6 @@ if filereadable(expand("~/.vimrc.bundles.local"))
 endif
 " }
 
-" Use fork bundles if available {
-if filereadable(expand("~/.vimrc.bundles.fork"))
-   source ~/.vimrc.bundles.fork
-endif
-" }
-
 " Use bundles config {
 if filereadable(expand("~/.vimrc.bundles"))
    source ~/.vimrc.bundles
@@ -73,7 +58,7 @@ if !has('gui')
 endif
 filetype plugin indent on " Automatically detect file types.
 syntax on " Syntax highlighting
-set mouse=a " Automatically enable mouse usage
+"set mouse=a " Automatically enable mouse usage
 set mousehide " Hide the mouse cursor while typing
 scriptencoding utf-8
 
@@ -84,15 +69,9 @@ elseif has ('gui') " On mac and Windows, use * register for copy-paste
 endif
 
 " Most prefer to automatically switch to the current file directory when
-" a new buffer is opened; to prevent this behavior, add the following to
-" your .vimrc.before.local file:
-" let g:no_autochdir = 1
-if !exists('g:no_autochdir')
-   autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-   " Always switch to the current file directory
-endif
+" a new buffer is opened
+autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 
-"set autowrite " Automatically write a file when leaving a modified buffer
 au FocusLost * :silent! wall                 " Save on FocusLost
 au FocusLost * call feedkeys("\<C-\>\<C-n>") " Return to normal mode
 set shortmess+=filmnrxoOtT " Abbrev. of messages (avoids 'hit enter')
@@ -114,21 +93,18 @@ if has('persistent_undo')
    set undoreload=10000 " Maximum number lines to save for undo on a buffer reload
 endif
 
-" To disable views add the following to your .vimrc.before.local file:
-" let g:no_views = 1
-if !exists('g:no_views')
-   " Add exclusions to mkview and loadview
-   " eg: *.*, svn-commit.tmp
-   let g:skipview_files = [
-            \ '\[example pattern\]'
-            \ ]
-endif
+" Add exclusions to mkview and loadview
+" eg: *.*, svn-commit.tmp
+let g:skipview_files = [
+        \ '\[example pattern\]'
+        \ ]
 " }
 
 " }
 
 " Vim UI {
 
+" Choose a colorscheme
 if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
    let g:solarized_termcolors=256
    let g:solarized_termtrans=1
@@ -161,8 +137,6 @@ highlight clear SignColumn " SignColumn should match background for
 " things like vim-gitgutter
 
 highlight clear LineNr " Current line number row will have same background color in relative mode.
-" Things like vim-gitgutter will match LineNr highlight
-"highlight clear CursorLineNr " Remove highlight color from current line number
 
 if has('cmdline_info')
    set ruler " Show the ruler
@@ -189,6 +163,7 @@ set nu " Line numbers on
 set showmatch " Show matching brackets/parenthesis
 set incsearch " Find as you type search
 set hlsearch " Highlight search terms
+set lazyredraw " Don't redraw the screen in macros
 set winminheight=0 " Windows can be 0 line high
 set ignorecase " Case insensitive search
 set smartcase " Case sensitive when uc present
@@ -218,51 +193,42 @@ set nojoinspaces " Prevents inserting two spaces after punctuation on a join (J)
 set splitright " Puts new vsplit windows to the right of the current
 set splitbelow " Puts new split windows to the bottom of the current
 "set matchpairs+=<:> " Match, to be used with %
-set pastetoggle=<F12> " pastetoggle (sane indentation on pastes)
 set encoding=utf8
 set autoread " Autoread the buffer
 set autowrite " Autowrite the buffer
-"set comments=sl:/*,mb:*,elx:*/ " auto format comment blocks
 " Remove trailing whitespaces and ^M chars
 autocmd FileType c,cpp,java,go,php,javascript,python,twig,verilog_systemverilog,xml,yml autocmd BufWritePre <buffer> call StripTrailingWhitespace()
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
 autocmd FileType haskell setlocal expandtab shiftwidth=2 softtabstop=2
-" preceding line best in a plugin but here for now.
-
-autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-
-" Workaround vim-commentary for Haskell
-autocmd FileType haskell setlocal commentstring=--\ %s
-" Workaround broken colour highlighting in Haskell
-autocmd FileType haskell setlocal nospell
 
 " }
 
 
 " Key (re)Mappings {
 
-" The default leader is '\', but many people prefer ',' as it's in a standard
-" location. To override this behavior and set it back to '\' (or any other
-" character) add the following to your .vimrc.before.local file:
-" let g:my_leader='\'
-if !exists('g:my_leader')
-   let mapleader = ','
-else
-   let mapleader=g:my_leader
-endif
+let mapleader = ','
+
+" Quick save/quit
+nmap <leader>w :w<CR>
+
+" Use arrow keys to move lines around
+nnoremap <Down> :m+<CR>==
+nnoremap <Up> :m-2<CR>==
+vnoremap <Down> :m '>+1<CR>gv=gv
+vnoremap <Up> :m '<-2<CR>gv=gv
+
+" Move words
+nnoremap <Left>  "_yiw?\v\w+\_W+%#<CR>:s/\v(%#\w+)(\_W+)(\w+)/\3\2\1/<CR><C-o><C-l>
+nnoremap <Right> "_yiw:s/\v(%#\w+)(\_W+)(\w+)/\3\2\1/<CR><C-o>/\v\w+\_W+<CR><C-l>
+
 
 " Easier moving in tabs and windows
 " The lines conflict with the default digraph mapping of <C-K>
-" If you prefer that functionality, add the following to your
-" .vimrc.before.local file:
-" let g:no_easyWindows = 1
-if !exists('g:no_easyWindows')
-   "map <C-J> <C-W>j<C-W>_
-   "map <C-K> <C-W>k<C-W>_
-   map <C-L> <C-W>l<C-W>_
-   map <C-H> <C-W>h<C-W>_
-endif
+"map <C-J> <C-W>j<C-W>_
+"map <C-K> <C-W>k<C-W>_
+map <C-L> <C-W>l<C-W>_
+map <C-H> <C-W>h<C-W>_
 
 " prevent fat fingering F1
 map f1 <Esc>
@@ -272,38 +238,34 @@ noremap j gj
 noremap k gk
 
 " <Ctrl-l> to insert a <=
-inoremap <C-l>  <= 
+inoremap <C-l> <Space><=<Space>
+
+" Esc avoidance
+imap jj <Esc>
 
 " Map . to reset to the original cursor position when complete
 " This makes use of marks to the letter 'q'
-noremap . mq.`q
+"noremap . mq.`q
 
 " The following two lines conflict with moving to top and
 " bottom of the screen
-" If you prefer that functionality, add the following to your
-" .vimrc.before.local file:
-" let g:no_fastTabs = 1
-if !exists('g:no_fastTabs')
-   map <S-H> gT
-   map <S-L> gt
-endif
+"map <S-H> gT
+"map <S-L> gt
 
 " Stupid shift key fixes
-if !exists('g:no_keyfixes')
-   if has("user_commands")
-      command! -bang -nargs=* -complete=file E e<bang> <args>
-      command! -bang -nargs=* -complete=file W w<bang> <args>
-      command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-      command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-      command! -bang Wa wa<bang>
-      command! -bang WA wa<bang>
-      command! -bang Q q<bang>
-      command! -bang QA qa<bang>
-      command! -bang Qa qa<bang>
-   endif
-
-   cmap Tabe tabe
+if has("user_commands")
+   command! -bang -nargs=* -complete=file E e<bang> <args>
+   command! -bang -nargs=* -complete=file W w<bang> <args>
+   command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+   command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+   command! -bang Wa wa<bang>
+   command! -bang WA wa<bang>
+   command! -bang Q q<bang>
+   command! -bang QA qa<bang>
+   command! -bang Qa qa<bang>
 endif
+
+cmap Tabe tabe
 
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
@@ -372,6 +334,7 @@ imap [H g0
 
 " RSI reduction keybindings
 imap <C-k> _
+imap <C-d> _
 
 " For when you forget to sudo.. Really Write the file.
 cmap w!! w !sudo tee % >/dev/null
@@ -399,14 +362,8 @@ map zh zH
 
 " Plugins {
 
-" PIV {
-let g:DisableAutoPHPFolding = 0
-let g:PIVAutoClose = 0
-" }
-
 " Misc {
 let b:match_ignorecase = 1
-call arpeggio#map('i','', 0, 'jk','<Esc>')
 " }
 
 " OmniComplete {
@@ -417,92 +374,6 @@ if has("autocmd") && exists("+omnifunc")
             \endif
 endif
 
-" }
-
-" neocomplete {
-   "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-   " Disable AutoComplPop.
-   "let g:acp_enableAtStartup = 0
-   " Use neocomplete.
-   let g:neocomplete#enable_at_startup = 1
-   " Use smartcase.
-   let g:neocomplete#enable_smart_case = 1
-   " Set minimum syntax keyword length.
-   let g:neocomplete#sources#syntax#min_keyword_length = 3
-   let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-   " Define dictionary.
-   let g:neocomplete#sources#dictionary#dictionaries = {
-       \ 'default' : '',
-       \ 'vimshell' : $HOME.'/.vimshell_hist',
-       \ 'scheme' : $HOME.'/.gosh_completions'
-           \ }
-
-   " Define keyword.
-   if !exists('g:neocomplete#keyword_patterns')
-       let g:neocomplete#keyword_patterns = {}
-   endif
-   let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-   " Plugin key-mappings.
-   inoremap <expr><C-g>     neocomplete#undo_completion()
-   inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-   " Recommended key-mappings.
-   " <CR>: close popup and save indent.
-   inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-   function! s:my_cr_function()
-     return neocomplete#close_popup() . "\<CR>"
-     " For no inserting <CR> key.
-     "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-   endfunction
-   " <TAB>: completion.
-   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-   " <C-h>, <BS>: close popup and delete backword char.
-   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-   inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-   inoremap <expr><C-y>  neocomplete#close_popup()
-   inoremap <expr><C-e>  neocomplete#cancel_popup()
-   " Close popup by <Space>.
-   "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-   " For cursor moving in insert mode(Not recommended)
-   "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-   "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-   "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-   "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-   " Or set this.
-   "let g:neocomplete#enable_cursor_hold_i = 1
-   " Or set this.
-   "let g:neocomplete#enable_insert_char_pre = 1
-
-   " AutoComplPop like behavior.
-   "let g:neocomplete#enable_auto_select = 1
-
-   " Shell like behavior(not recommended).
-   "set completeopt+=longest
-   "let g:neocomplete#enable_auto_select = 1
-   "let g:neocomplete#disable_auto_complete = 1
-   "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-   " Enable omni completion.
-   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-   " Enable heavy omni completion.
-   if !exists('g:neocomplete#sources#omni#input_patterns')
-     let g:neocomplete#sources#omni#input_patterns = {}
-   endif
-   "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-   "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-   "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-   " For perlomni.vim setting.
-   " https://github.com/c9s/perlomni.vim
-   let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 " }
 
 " Ctags {
@@ -528,47 +399,15 @@ nmap <Leader>ac <Plug>ToggleAutoCloseMappings
 
 " Ultisnips {
 let g:UltiSnipsExpandTrigger="<C-CR>"
-let g:UltiSnipsJumpForwardTrigger="<C-tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-" }
-
-" NerdTree {
-map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
-map <leader>e :NERDTreeFind<CR>
-nmap <leader>nt :NERDTreeFind<CR>
-
-let NERDTreeShowBookmarks=1
-let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
-let NERDTreeChDirMode=0
-let NERDTreeQuitOnOpen=1
-let NERDTreeMouseMode=2
-let NERDTreeShowHidden=1
-let NERDTreeKeepTreeInNewTab=1
-let g:nerdtree_tabs_open_on_gui_startup=0
-" }
-
-" Tabularize {
-"nmap <Leader>a& :Tabularize /&<CR>
-"vmap <Leader>a& :Tabularize /&<CR>
-"nmap <Leader>a= :Tabularize /=<CR>
-"vmap <Leader>a= :Tabularize /=<CR>
-"nmap <Leader>a: :Tabularize /:<CR>
-"vmap <Leader>a: :Tabularize /:<CR>
-"nmap <Leader>a:: :Tabularize /:\zs<CR>
-"vmap <Leader>a:: :Tabularize /:\zs<CR>
-"nmap <Leader>a, :Tabularize /,<CR>
-"vmap <Leader>a, :Tabularize /,<CR>
-"nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-"vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+let g:UltiSnipsJumpForwardTrigger="<A-j>"
+"let g:UltiSnipsJumpBackwardTrigger="<s-j>"
+let g:snips_author="Tyler Thrane"
+let g:snips_author_email="tjthrane@gmail.com"
 " }
 
 " Easy Align {
 vnoremap <silent> <Leader>a :LiveEasyAlign<CR>
 vnoremap <silent> <Leader><Enter> :EasyAlign<CR>
-" }
-
-" JSON {
-nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
 " }
 
 " PyMode {
@@ -605,76 +444,10 @@ else
 endif
 "}
 
-" TagBar {
-nnoremap <silent> <leader>tt :TagbarToggle<CR>
-
-" If using go please install the gotags program using the following
-" go install github.com/jstemmer/gotags
-" And make sure gotags is in your path
-let g:tagbar_type_go = {
-         \ 'ctagstype' : 'go',
-         \ 'kinds' : [ 'p:package', 'i:imports:1', 'c:constants', 'v:variables',
-         \ 't:types', 'n:interfaces', 'w:fields', 'e:embedded', 'm:methods',
-         \ 'r:constructor', 'f:functions' ],
-         \ 'sro' : '.',
-         \ 'kind2scope' : { 't' : 'ctype', 'n' : 'ntype' },
-         \ 'scope2kind' : { 'ctype' : 't', 'ntype' : 'n' },
-         \ 'ctagsbin' : 'gotags',
-         \ 'ctagsargs' : '-sort -silent'
-         \ }
-"}
-
 " PythonMode {
 " Disable if python support not present
 if !has('python')
    let g:pymode = 1
-endif
-" }
-
-" systemverilog {
-autocmd BufRead,BufNewFile *.v,*.vh set filetype verilog
-autocmd BufRead,BufNewFile *.sv,*.svi set filetype=verilog_systemverilog
-" }
-
-" Rainbow Parentheses {
-function! Config_Rainbow()
-   call rainbow#load()
-endfunction
-
-function! Load_Rainbow()
-   call rainbow#load()
-endfunction
-
-augroup TastetheRainbow
-   autocmd!
-   autocmd Syntax * call Config_Rainbow()
-   autocmd VimEnter,BufRead,BufWinEnter,BufNewFile * call Load_Rainbow()
-augroup END
-" }
-
-" matchit {
-if exists('loaded_matchit')
-   let b:match_ignorecase=0
-   let b:match_words=
-            \ '\<begin\>:\<end\>,' .
-            \ '\<if\>:\<else\>,' .
-            \ '\<module\>:\<endmodule\>,' .
-            \ '\<class\>:\<endclass\>,' .
-            \ '\<program\>:\<endprogram\>,' .
-            \ '\<clocking\>:\<endclocking\>,' .
-            \ '\<property\>:\<endproperty\>,' .
-            \ '\<sequence\>:\<endsequence\>,' .
-            \ '\<package\>:\<endpackage\>,' .
-            \ '\<covergroup\>:\<endgroup\>,' .
-            \ '\<primitive\>:\<endprimitive\>,' .
-            \ '\<specify\>:\<endspecify\>,' .
-            \ '\<generate\>:\<endgenerate\>,' .
-            \ '\<interface\>:\<endinterface\>,' .
-            \ '\<function\>:\<endfunction\>,' .
-            \ '\<task\>:\<endtask\>,' .
-            \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
-            \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
-            \ '`ifdef\>:`else\>:`endif\>,'
 endif
 " }
 
@@ -813,20 +586,6 @@ endfunction
 call InitializeDirectories()
 " }
 
-" Initialize NERDTree as needed {
-function! NERDTreeInitAsNeeded()
-   redir => bufoutput
-   buffers!
-   redir END
-   let idx = stridx(bufoutput, "NERD_tree")
-   if idx > -1
-      NERDTreeMirror
-      NERDTreeFind
-      wincmd l
-   endif
-endfunction
-" }
-
 " Strip whitespace {
 function! StripTrailingWhitespace()
    " To disable the stripping of whitespace, add the following to your
@@ -874,12 +633,6 @@ command! -nargs=+ Calc :py print <args>
 py from math import *
 " }
 
-" }
-
-" Use fork vimrc if available {
-if filereadable(expand("~/.vimrc.fork"))
-   source ~/.vimrc.fork
-endif
 " }
 
 " Use local vimrc if available {

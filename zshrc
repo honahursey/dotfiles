@@ -12,3 +12,4 @@ fi
 
 # Customize to your needs...
 # . ~/.z_sh/z.sh
+export EDITOR='vim'

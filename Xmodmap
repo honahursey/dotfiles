@@ -8,12 +8,8 @@ keycode 160 = XF86AudioMute
 keycode 174 = XF86AudioLowerVolume
 keycode 176 = XF86AudioRaiseVolume
 
-! Remap caps lock to ctrl
-keycode 66  = Control_L
-clear Lock
+remove Lock = Caps_Lock
+remove Control = Control_L
+keysym Caps_Lock = Control_L
+add Lock = Caps_Lock
 add Control = Control_L
-
-!remove Lock = Caps_Lock
-!keysym Escape = Caps_Lock
-!keysym Caps_Lock = Escape
-!add Lock = Caps_Lock

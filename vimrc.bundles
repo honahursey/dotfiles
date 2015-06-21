@@ -65,16 +65,10 @@
         endif
     " }
 
-    " Use fork bundles config if available {
-        if filereadable(expand("~/.vimrc.bundles.fork"))
-            source ~/.vimrc.bundles.fork
-        endif
-    " }
-
     " In your .vimrc.bundles.local file"
     " list only the plugin groups you will use
     if !exists('g:bundle_groups')
-        let g:bundle_groups=['general', 'snipmate', 'neocomplete', 'programming', 'systemverilog', 'python', 'misc']
+        let g:bundle_groups=['general', 'snipmate', 'vimcompletesme', 'programming', 'systemverilog', 'python', 'misc']
     endif
 
     " To override all the included bundles, put
@@ -84,8 +78,7 @@
 
     " General
         if count(g:bundle_groups, 'general')
-            Bundle 'scrooloose/nerdtree'
-            Bundle 'scrooloose/nerdcommenter'
+            "Bundle 'scrooloose/nerdtree'
             Bundle 'altercation/vim-colors-solarized'
             Bundle 'tpope/vim-surround'
             Bundle 'tpope/vim-repeat'
@@ -100,10 +93,9 @@
                 Bundle 'bling/vim-airline'
             endif
 
-            Bundle 'Lokaltog/vim-easymotion'
-            Bundle 'godlygeek/csapprox'
-            Bundle 'oblitum/rainbow'
-            Bundle 'vim-scripts/surrparen'
+            "Bundle 'Lokaltog/vim-easymotion'
+            "Bundle 'godlygeek/csapprox'
+            "Bundle 'vim-scripts/surrparen'
             Bundle 'mbbill/undotree'
             Bundle 'Yggdroot/indentLine'
             Bundle 'tpope/vim-abolish.git'
@@ -121,7 +113,7 @@
     " Snippets & AutoComplete
         if count(g:bundle_groups, 'snipmate')
             Bundle 'SirVer/ultisnips'
-            Bundle 'honza/vim-snippets'
+            "Bundle 'honza/vim-snippets'
             " Source support_function.vim to support vim-snippets.
             if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
                 source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
@@ -131,6 +123,8 @@
             Bundle 'Shougo/neocomplcache'
         elseif count(g:bundle_groups, 'neocomplete')
             Bundle 'Shougo/neocomplete.vim'
+        elseif count (g:bundle_groups, 'vimcompletesme')
+            Bundle 'ajh17/VimCompletesMe'
         elseif count(g:bundle_groups, 'youcompleteme')
             Bundle 'Valloric/YouCompleteMe'
         elseif count(g:bundle_groups, 'supertab')
@@ -147,20 +141,12 @@
 
     " SystemVerilog
         if count(g:bundle_groups, 'systemverilog')
-            Bundle 'WeiChungWu/vim-SystemVerilog'
+            Bundle 'vhda/verilog_systemverilog.vim'
         endif
 
     " Languages
         Bundle 'sheerun/vim-polyglot'
     " Misc
-        if count(g:bundle_groups, 'misc')
-            Bundle 'kana/vim-arpeggio'
-        endif
     endif
 
-" }
-
-" General {
-    " set autowrite " automatically write a file when leaving a modified buffer
-    set shortmess+=filmnrxoOtT " Abbrev. of messages (avoids 'hit enter')
 " }
